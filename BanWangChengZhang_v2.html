@@ -1,0 +1,1842 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>BanWangChengZhang — Dog Training & Health Center</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<style>
+:root {
+  --bark:    #3D2B1F;
+  --bark2:   #5C3D2E;
+  --tan:     #C4956A;
+  --tan-lt:  #EDD5B8;
+  --cream:   #FAF5EE;
+  --forest:  #2D5A3D;
+  --forest2: #4A7C5F;
+  --forest-lt:#E4EFE8;
+  --sand:    #F2E8D9;
+  --muted:   #8C7060;
+  --white:   #FFFFFF;
+  --danger:  #B94040;
+  --gold:    #C4956A;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--cream);
+  color: var(--bark);
+  min-height: 100vh;
+}
+h1,h2,h3 { font-family: 'DM Serif Display', serif; }
+.page { display: none; }
+.page.active { display: block; }
+
+/* NAV */
+nav {
+  position: sticky; top: 0; z-index: 200;
+  background: var(--bark);
+  padding: 0 2rem;
+  height: 60px;
+  display: flex; align-items: center; justify-content: space-between;
+  box-shadow: 0 2px 12px rgba(61,43,31,.3);
+}
+.nav-brand {
+  font-family: 'DM Serif Display', serif;
+  font-size: 1.25rem;
+  color: var(--tan-lt);
+  letter-spacing: .3px;
+}
+.nav-brand span { color: var(--tan); }
+.nav-links { display: flex; gap: .4rem; align-items: center; }
+.nav-btn {
+  background: transparent;
+  border: 1px solid rgba(196,149,106,.3);
+  color: var(--tan-lt);
+  padding: 5px 14px;
+  border-radius: 20px;
+  font-size: .8rem;
+  font-family: 'DM Sans', sans-serif;
+  cursor: pointer;
+  transition: .2s;
+  font-weight: 500;
+}
+.nav-btn:hover { background: rgba(196,149,106,.15); border-color: var(--tan); }
+.nav-btn.active { background: var(--tan); border-color: var(--tan); color: var(--bark); font-weight: 600; }
+.nav-user {
+  background: var(--forest);
+  border: 1px solid var(--forest2);
+  color: #fff;
+  padding: 5px 14px;
+  border-radius: 20px;
+  font-size: .8rem;
+  font-family: 'DM Sans', sans-serif;
+  cursor: pointer;
+  transition: .2s;
+  font-weight: 500;
+}
+.nav-user:hover { background: var(--forest2); }
+
+/* BUTTONS */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+  padding: 11px 24px; border-radius: 8px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: .9rem; font-weight: 600;
+  cursor: pointer; border: none; transition: .2s;
+  text-decoration: none;
+}
+.btn-bark { background: var(--bark); color: var(--tan-lt); }
+.btn-bark:hover { background: var(--bark2); }
+.btn-forest { background: var(--forest); color: #fff; }
+.btn-forest:hover { background: var(--forest2); }
+.btn-tan { background: var(--tan); color: var(--bark); }
+.btn-tan:hover { background: #B8854E; color: #fff; }
+.btn-outline { background: transparent; border: 1.5px solid var(--bark2); color: var(--bark2); }
+.btn-outline:hover { background: var(--sand); }
+.btn-lg { padding: 14px 32px; font-size: 1rem; }
+.btn-full { width: 100%; }
+.btn:disabled { opacity: .45; cursor: not-allowed; }
+
+/* INPUTS */
+.field { margin-bottom: 1rem; }
+.field label { display: block; font-size: .82rem; font-weight: 600; color: var(--bark2); margin-bottom: 5px; letter-spacing: .2px; text-transform: uppercase; }
+.field input, .field select, .field textarea {
+  width: 100%;
+  padding: 10px 14px;
+  border: 1.5px solid var(--tan-lt);
+  border-radius: 8px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: .9rem;
+  background: #fff;
+  color: var(--bark);
+  transition: .2s;
+  appearance: none;
+}
+.field input:focus, .field select:focus, .field textarea:focus {
+  outline: none;
+  border-color: var(--tan);
+  box-shadow: 0 0 0 3px rgba(196,149,106,.18);
+}
+.field select { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%235C3D2E' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 12px center; padding-right: 36px; }
+
+/* CARDS */
+.card {
+  background: #fff;
+  border-radius: 14px;
+  box-shadow: 0 1px 8px rgba(61,43,31,.07);
+  padding: 1.5rem;
+}
+.card-sand { background: var(--sand); border-radius: 14px; padding: 1.5rem; }
+
+/* BADGES */
+.badge { display: inline-block; padding: 3px 10px; border-radius: 20px; font-size: .73rem; font-weight: 600; letter-spacing: .2px; }
+.badge-green { background: var(--forest-lt); color: var(--forest); }
+.badge-tan   { background: var(--tan-lt); color: var(--bark2); }
+.badge-red   { background: #FEE2E2; color: var(--danger); }
+.badge-blue  { background: #DBEAFE; color: #1E40AF; }
+
+/* BOOKING STEPS */
+.steps { display: flex; margin-bottom: 2rem; }
+.step-item { flex: 1; text-align: center; position: relative; }
+.step-item::after {
+  content: '';
+  position: absolute;
+  top: 14px; left: 50%; width: 100%;
+  height: 2px; background: var(--tan-lt);
+}
+.step-item:last-child::after { display: none; }
+.step-circle {
+  width: 28px; height: 28px; border-radius: 50%;
+  background: var(--tan-lt); color: var(--muted);
+  display: flex; align-items: center; justify-content: center;
+  font-size: .75rem; font-weight: 700;
+  margin: 0 auto 6px; position: relative; z-index: 1;
+  transition: .3s;
+}
+.step-item.done .step-circle { background: var(--forest); color: #fff; }
+.step-item.active .step-circle { background: var(--tan); color: var(--bark); box-shadow: 0 0 0 4px rgba(196,149,106,.25); }
+.step-label { font-size: .72rem; font-weight: 500; color: var(--muted); }
+.step-item.active .step-label { color: var(--bark); font-weight: 600; }
+.step-item.done .step-label { color: var(--forest); }
+
+/* TIME SLOTS */
+.time-slot {
+  border: 1.5px solid var(--tan-lt);
+  border-radius: 8px;
+  padding: 10px 14px;
+  cursor: pointer;
+  font-size: .85rem;
+  font-weight: 500;
+  text-align: center;
+  transition: .15s;
+  background: #fff;
+  color: var(--bark2);
+}
+.time-slot:hover { border-color: var(--tan); background: var(--sand); }
+.time-slot.selected { border-color: var(--forest); background: var(--forest-lt); color: var(--forest); font-weight: 700; }
+.time-slot.booked { opacity: .35; cursor: not-allowed; pointer-events: none; background: #F5F5F5; }
+
+/* CALENDAR */
+.cal-day {
+  aspect-ratio: 1;
+  border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: .8rem; cursor: pointer;
+  border: 1.5px solid transparent;
+  transition: .15s; font-weight: 500;
+}
+.cal-day:hover:not(.disabled):not(.empty) { border-color: var(--tan); background: var(--sand); }
+.cal-day.selected { background: var(--tan); color: #fff; border-color: var(--tan); font-weight: 700; }
+.cal-day.disabled { color: #CCC; cursor: default; }
+.cal-day.today { color: var(--forest); font-weight: 700; }
+.cal-day.empty { cursor: default; }
+
+/* SERVICE CARDS */
+.svc-card {
+  border: 2px solid var(--tan-lt);
+  border-radius: 12px;
+  padding: 1.25rem;
+  cursor: pointer;
+  transition: .2s;
+  background: #fff;
+  text-align: center;
+}
+.svc-card:hover { border-color: var(--tan); background: var(--sand); }
+.svc-card.selected { border-color: var(--forest); background: var(--forest-lt); }
+.svc-icon { font-size: 2rem; margin-bottom: .5rem; }
+.svc-name { font-family: 'DM Serif Display', serif; font-size: 1rem; color: var(--bark); margin-bottom: .25rem; }
+.svc-desc { font-size: .78rem; color: var(--muted); line-height: 1.45; }
+
+/* PAYMENT TABS */
+.pay-tab {
+  flex: 1; padding: 10px; text-align: center;
+  font-size: .85rem; font-weight: 600;
+  cursor: pointer; border-bottom: 2.5px solid var(--tan-lt);
+  color: var(--muted); transition: .2s;
+}
+.pay-tab.active { border-color: var(--forest); color: var(--forest); }
+
+/* MODAL */
+.modal-bg {
+  position: fixed; inset: 0;
+  background: rgba(61,43,31,.55);
+  z-index: 300;
+  display: flex; align-items: center; justify-content: center;
+  padding: 1rem;
+}
+.modal-box {
+  background: #fff;
+  border-radius: 18px;
+  padding: 2rem;
+  max-width: 480px; width: 100%;
+  max-height: 88vh; overflow-y: auto;
+  box-shadow: 0 16px 48px rgba(61,43,31,.2);
+}
+
+/* QR CODE MOCK */
+.qr-mock {
+  width: 160px; height: 160px;
+  margin: 0 auto;
+  background: #fff;
+  border: 3px solid var(--bark);
+  border-radius: 10px;
+  padding: 10px;
+  position: relative;
+  overflow: hidden;
+}
+.qr-inner {
+  width: 100%; height: 100%;
+  background:
+    repeating-linear-gradient(90deg, var(--bark) 0px, var(--bark) 6px, transparent 6px, transparent 10px),
+    repeating-linear-gradient(180deg, var(--bark) 0px, var(--bark) 6px, transparent 6px, transparent 10px);
+  background-size: 10px 10px;
+  opacity: .18;
+  border-radius: 4px;
+}
+.qr-corner {
+  position: absolute;
+  width: 32px; height: 32px;
+  border: 5px solid var(--bark);
+  border-radius: 4px;
+}
+.qr-tl { top: 10px; left: 10px; border-right: none; border-bottom: none; }
+.qr-tr { top: 10px; right: 10px; border-left: none; border-bottom: none; }
+.qr-bl { bottom: 10px; left: 10px; border-right: none; border-top: none; }
+
+/* SUCCESS SCREEN */
+.success-ring {
+  width: 80px; height: 80px; border-radius: 50%;
+  background: var(--forest-lt);
+  display: flex; align-items: center; justify-content: center;
+  margin: 0 auto 1rem;
+  font-size: 2.2rem;
+  border: 3px solid var(--forest);
+}
+.id-pill {
+  background: var(--bark);
+  color: var(--tan-lt);
+  font-family: 'DM Serif Display', serif;
+  font-size: 1.6rem;
+  padding: .6rem 1.8rem;
+  border-radius: 40px;
+  display: inline-block;
+  letter-spacing: 2px;
+  margin: .5rem 0 1.25rem;
+}
+
+/* DASHBOARD */
+.stat-box {
+  background: var(--sand);
+  border-radius: 12px;
+  padding: 1.1rem 1.25rem;
+  text-align: center;
+}
+.stat-val { font-family: 'DM Serif Display', serif; font-size: 1.9rem; color: var(--bark); }
+.stat-lbl { font-size: .75rem; color: var(--muted); font-weight: 500; margin-top: 2px; text-transform: uppercase; letter-spacing: .3px; }
+
+/* UPLOAD */
+.upload-zone {
+  border: 2px dashed var(--tan-lt);
+  border-radius: 10px;
+  padding: 1.5rem;
+  text-align: center;
+  cursor: pointer;
+  transition: .2s;
+  background: var(--sand);
+}
+.upload-zone:hover { border-color: var(--tan); }
+.upload-zone.has-file { border-color: var(--forest); background: var(--forest-lt); }
+
+/* PROGRESS BAR */
+.prog-track { height: 6px; background: var(--tan-lt); border-radius: 3px; overflow: hidden; }
+.prog-fill { height: 100%; background: var(--forest); border-radius: 3px; transition: width .4s; }
+
+/* HERO */
+.hero-bg {
+  background: var(--bark);
+  position: relative;
+  overflow: hidden;
+  padding: 5rem 2rem 4rem;
+  text-align: center;
+}
+.hero-bg::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: radial-gradient(ellipse at 70% 50%, rgba(196,149,106,.2) 0%, transparent 65%),
+              radial-gradient(ellipse at 20% 80%, rgba(45,90,61,.25) 0%, transparent 60%);
+}
+.hero-dots {
+  position: absolute; inset: 0;
+  background-image: radial-gradient(circle, rgba(196,149,106,.12) 1px, transparent 1px);
+  background-size: 28px 28px;
+}
+
+/* ERROR */
+.err-msg { color: var(--danger); font-size: .82rem; margin-top: .4rem; }
+
+/* ANIMATIONS */
+@keyframes fadeUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+.fade-up { animation: fadeUp .35s ease forwards; }
+@keyframes spin { to { transform: rotate(360deg); } }
+.spin { animation: spin .8s linear infinite; }
+
+/* RECORD TABLE */
+.rec-row { display: flex; gap: .5rem; padding: 7px 0; border-bottom: 1px solid var(--sand); font-size: .87rem; }
+.rec-row:last-child { border-bottom: none; }
+.rec-lbl { color: var(--muted); width: 42%; flex-shrink: 0; font-weight: 500; }
+.rec-val { color: var(--bark); font-weight: 600; }
+
+/* ROLE SELECTOR MODAL */
+.role-modal-bg {
+  position: fixed; inset: 0;
+  background: rgba(20,12,8,.72);
+  backdrop-filter: blur(6px);
+  z-index: 500;
+  display: flex; align-items: center; justify-content: center;
+  padding: 1rem;
+}
+.role-modal-box {
+  background: #fff;
+  border-radius: 22px;
+  padding: 2.5rem 2rem;
+  max-width: 440px; width: 100%;
+  box-shadow: 0 24px 64px rgba(61,43,31,.28);
+  text-align: center;
+  animation: fadeUp .4s ease forwards;
+}
+.role-card {
+  border: 2px solid var(--tan-lt);
+  border-radius: 14px;
+  padding: 1.25rem 1rem;
+  cursor: pointer;
+  transition: .2s;
+  background: #fff;
+  position: relative;
+  overflow: hidden;
+}
+.role-card::before {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0;
+  height: 3px;
+  background: var(--tan-lt);
+  transition: .2s;
+}
+.role-card:hover { border-color: var(--tan); background: var(--sand); transform: translateY(-2px); box-shadow: 0 6px 20px rgba(196,149,106,.15); }
+.role-card:hover::before { background: var(--tan); }
+.role-card.vet-card:hover { border-color: var(--forest); }
+.role-card.vet-card:hover::before { background: var(--forest); }
+.role-card.trainer-card:hover { border-color: var(--bark2); }
+.role-card.trainer-card:hover::before { background: var(--bark2); }
+.role-icon { font-size: 2.2rem; margin-bottom: .5rem; }
+.role-name { font-family: 'DM Serif Display', serif; font-size: 1rem; color: var(--bark); margin-bottom: .2rem; }
+.role-desc { font-size: .75rem; color: var(--muted); line-height: 1.4; }
+
+/* VET PORTAL */
+.vet-header {
+  background: linear-gradient(135deg, var(--forest) 0%, #1a3d2a 100%);
+  padding: 2.5rem 2rem;
+  color: #fff;
+  position: relative;
+  overflow: hidden;
+}
+.vet-header::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: radial-gradient(ellipse at 80% 30%, rgba(74,124,95,.4) 0%, transparent 60%),
+              radial-gradient(ellipse at 10% 80%, rgba(196,149,106,.15) 0%, transparent 50%);
+}
+.vet-header::after {
+  content: '';
+  position: absolute; inset: 0;
+  background-image: radial-gradient(circle, rgba(255,255,255,.06) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+.vet-badge {
+  display: inline-flex; align-items: center; gap: .4rem;
+  background: rgba(255,255,255,.12); border: 1px solid rgba(255,255,255,.25);
+  color: rgba(255,255,255,.9); padding: 4px 14px; border-radius: 20px;
+  font-size: .75rem; font-weight: 600; letter-spacing: .6px; text-transform: uppercase;
+  margin-bottom: 1rem; position: relative; z-index: 1;
+}
+.vet-search-box {
+  display: flex; gap: .6rem;
+  background: #fff; border-radius: 12px;
+  padding: .5rem .5rem .5rem 1rem;
+  box-shadow: 0 4px 16px rgba(0,0,0,.12);
+}
+.vet-search-box input {
+  flex: 1; border: none; outline: none;
+  font-family: 'DM Sans', sans-serif;
+  font-size: .95rem; color: var(--bark);
+  background: transparent;
+}
+.vet-search-box input::placeholder { color: #AAA; }
+.dog-result-item {
+  border: 1.5px solid var(--tan-lt);
+  border-radius: 10px;
+  padding: .9rem 1rem;
+  cursor: pointer;
+  transition: .15s;
+  background: #fff;
+  display: flex; align-items: center; gap: .75rem;
+}
+.dog-result-item:hover { border-color: var(--forest); background: var(--forest-lt); }
+.dog-avatar {
+  width: 42px; height: 42px; border-radius: 50%;
+  background: var(--sand); border: 2px solid var(--tan-lt);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.4rem; flex-shrink: 0;
+}
+
+/* VET FORM */
+.vet-section {
+  border: 1.5px solid var(--tan-lt);
+  border-radius: 14px;
+  overflow: hidden;
+  margin-bottom: 1rem;
+}
+.vet-section-header {
+  background: var(--sand);
+  padding: .8rem 1.25rem;
+  display: flex; align-items: center; gap: .5rem;
+  border-bottom: 1.5px solid var(--tan-lt);
+}
+.vet-section-header h4 {
+  font-family: 'DM Serif Display', serif;
+  font-size: .95rem; color: var(--bark); margin: 0;
+}
+.vet-section-body { padding: 1.25rem; background: #fff; }
+
+/* REVIEW SUMMARY */
+.review-summary-item {
+  display: flex; justify-content: space-between; align-items: flex-start;
+  padding: 7px 0; border-bottom: 1px solid var(--sand);
+  font-size: .85rem; gap: .5rem;
+}
+.review-summary-item:last-child { border-bottom: none; }
+.rs-lbl { color: var(--muted); font-weight: 500; width: 42%; flex-shrink: 0; }
+.rs-val { color: var(--bark); font-weight: 600; text-align: right; }
+
+/* HISTORY ENTRY */
+.hist-entry {
+  background: var(--sand);
+  border-left: 3px solid var(--forest);
+  border-radius: 0 10px 10px 0;
+  padding: .85rem 1rem;
+  margin-bottom: .6rem;
+}
+
+/* NAV VET MODE */
+nav.vet-mode { background: var(--forest); }
+.vet-nav-indicator {
+  display: flex; align-items: center; gap: .5rem;
+  background: rgba(255,255,255,.12);
+  border: 1px solid rgba(255,255,255,.25);
+  color: rgba(255,255,255,.9);
+  padding: 4px 12px; border-radius: 20px;
+  font-size: .78rem; font-weight: 600;
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="main-nav">
+  <div class="nav-brand">BanWang<span>ChengZhang</span></div>
+  <div class="nav-links" id="nav-links-wrap">
+    <button class="nav-btn" id="nb-home" onclick="goTo('home')">Home</button>
+    <button class="nav-btn" id="nb-register" onclick="goTo('register')">Register</button>
+    <button class="nav-btn" id="nb-book" onclick="goTo('book')">Book</button>
+    <button class="nav-btn" id="nb-dash" onclick="goTo('dash')">Dashboard</button>
+    <button class="nav-btn" id="nb-vet" style="display:none;background:rgba(255,255,255,.12);border-color:rgba(255,255,255,.3);color:#fff" onclick="goTo('vet')">🩺 Exam Portal</button>
+    <div class="vet-nav-indicator" id="vet-nav-indicator" style="display:none">🩺 Vet Mode</div>
+    <button class="nav-user" id="nb-user" onclick="handleUserBtn()">Log In</button>
+    <button class="nav-user" onclick="switchRole()" style="background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.25);font-size:.75rem" title="Switch Role">⇄ Role</button>
+  </div>
+</nav>
+
+<!-- =================== HOME =================== -->
+<div id="page-home" class="page active">
+  <div class="hero-bg">
+    <div class="hero-dots"></div>
+    <div style="position:relative;z-index:1">
+      <div style="display:inline-block;background:rgba(196,149,106,.15);border:1px solid rgba(196,149,106,.35);color:var(--tan-lt);padding:5px 16px;border-radius:20px;font-size:.78rem;font-weight:600;letter-spacing:.8px;text-transform:uppercase;margin-bottom:1.5rem">Est. Professional Dog Care</div>
+      <h1 style="font-size:clamp(2rem,5vw,3.4rem);color:var(--tan-lt);line-height:1.15;margin-bottom:1rem">Every dog deserves<br/><em style="color:var(--tan)">expert care.</em></h1>
+      <p style="color:rgba(237,213,184,.75);font-size:1rem;max-width:480px;margin:0 auto 2.25rem;line-height:1.65">Veterinary services, behavioral correction, and tailored physical training — matched intelligently to your dog's size and needs.</p>
+      <div style="display:flex;gap:.75rem;justify-content:center;flex-wrap:wrap">
+        <button class="btn btn-tan btn-lg" onclick="goTo('register')">Register Your Dog</button>
+        <button class="btn btn-lg" style="background:rgba(255,255,255,.08);border:1.5px solid rgba(196,149,106,.4);color:var(--tan-lt)" onclick="goTo('book')">Book a Service</button>
+      </div>
+    </div>
+  </div>
+
+  <div style="max-width:860px;margin:0 auto;padding:3.5rem 1.5rem">
+    <div style="text-align:center;margin-bottom:2.5rem">
+      <h2 style="font-size:1.9rem;color:var(--bark);margin-bottom:.5rem">What We Offer</h2>
+      <p style="color:var(--muted);font-size:.93rem">Professional services tailored to every breed and size</p>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1.25rem;margin-bottom:3.5rem">
+      <div class="card" style="border-top:3px solid var(--forest)">
+        <div style="font-size:2rem;margin-bottom:.6rem">🏥</div>
+        <h3 style="font-family:'DM Serif Display',serif;font-size:1.1rem;margin-bottom:.4rem;color:var(--bark)">Veterinary Care</h3>
+        <p style="font-size:.84rem;color:var(--muted);line-height:1.6">Health checks, vaccinations, diagnostics, and wellness certification for your dog.</p>
+      </div>
+      <div class="card" style="border-top:3px solid var(--tan)">
+        <div style="font-size:2rem;margin-bottom:.6rem">🧠</div>
+        <h3 style="font-family:'DM Serif Display',serif;font-size:1.1rem;margin-bottom:.4rem;color:var(--bark)">Behavioral Correction</h3>
+        <p style="font-size:.84rem;color:var(--muted);line-height:1.6">Obedience, scent work, and behavior modification — programs matched by your dog's weight class.</p>
+      </div>
+      <div class="card" style="border-top:3px solid var(--bark2)">
+        <div style="font-size:2rem;margin-bottom:.6rem">💪</div>
+        <h3 style="font-family:'DM Serif Display',serif;font-size:1.1rem;margin-bottom:.4rem;color:var(--bark)">Physical Exercise</h3>
+        <p style="font-size:.84rem;color:var(--muted);line-height:1.6">Swimming, agility, endurance — scientifically designed workout plans for every size.</p>
+      </div>
+    </div>
+
+    <div class="card-sand" style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem">
+      <div>
+        <h3 style="font-family:'DM Serif Display',serif;font-size:1.2rem;color:var(--bark);margin-bottom:.25rem">Ready to get started?</h3>
+        <p style="font-size:.87rem;color:var(--muted)">Create a free profile and book your first session today.</p>
+      </div>
+      <button class="btn btn-bark" onclick="goTo('register')">Create Profile →</button>
+    </div>
+  </div>
+</div>
+
+<!-- =================== REGISTER =================== -->
+<div id="page-register" class="page">
+  <div style="max-width:600px;margin:0 auto;padding:2.5rem 1.5rem">
+    <div style="margin-bottom:1.75rem">
+      <h2 style="font-size:1.8rem;color:var(--bark);margin-bottom:.35rem">Register Your Dog</h2>
+      <p style="color:var(--muted);font-size:.9rem">Create a profile to access bookings and track progress</p>
+    </div>
+
+    <div class="card" style="margin-bottom:1.5rem">
+      <h3 style="font-family:'DM Serif Display',serif;font-size:1rem;color:var(--bark2);margin-bottom:1rem;padding-bottom:.6rem;border-bottom:1px solid var(--sand)">Owner Information</h3>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:.75rem">
+        <div class="field" style="grid-column:span 2">
+          <label>Owner Full Name *</label>
+          <input type="text" id="r-owner" placeholder="e.g. Sarah Chen"/>
+        </div>
+        <div class="field" style="grid-column:span 2">
+          <label>Phone Number *</label>
+          <input type="tel" id="r-phone" placeholder="e.g. 0812345678"/>
+        </div>
+      </div>
+    </div>
+
+    <div class="card" style="margin-bottom:1.25rem">
+      <h3 style="font-family:'DM Serif Display',serif;font-size:1rem;color:var(--bark2);margin-bottom:1rem;padding-bottom:.6rem;border-bottom:1px solid var(--sand)">Dog Information</h3>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:.75rem">
+        <div class="field">
+          <label>Dog's Name *</label>
+          <input type="text" id="r-dog" placeholder="e.g. Biscuit"/>
+        </div>
+        <div class="field">
+          <label>Weight (kg) *</label>
+          <input type="number" id="r-weight" min="0.5" max="120" step="0.1" placeholder="e.g. 12.5"/>
+        </div>
+        <div class="field" style="grid-column:span 2">
+          <label>Breed *</label>
+          <select id="r-breed">
+            <option value="">-- Select Breed --</option>
+            <optgroup label="Toy (&lt;4kg)">
+              <option value="Chihuahua">Chihuahua</option>
+              <option value="Pomeranian">Pomeranian</option>
+            </optgroup>
+            <optgroup label="Small (4–10kg)">
+              <option value="French Bulldog">French Bulldog</option>
+              <option value="Corgi">Corgi</option>
+            </optgroup>
+            <optgroup label="Medium (11–25kg)">
+              <option value="Shiba Inu">Shiba Inu</option>
+              <option value="Border Collie">Border Collie</option>
+            </optgroup>
+            <optgroup label="Large (&gt;25kg)">
+              <option value="Golden Retriever">Golden Retriever</option>
+              <option value="German Shepherd">German Shepherd</option>
+            </optgroup>
+            <optgroup label="Other">
+              <option value="Mixed Breed">Mixed Breed</option>
+              <option value="Other">Other</option>
+            </optgroup>
+          </select>
+        </div>
+        <div class="field" style="grid-column:span 2">
+          <label>Health Status</label>
+          <select id="r-health">
+            <option value="Cleared">Cleared — Approved for all services</option>
+            <option value="Pending">Pending — Awaiting vet review</option>
+            <option value="Restricted">Restricted — Vet care only</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <div id="r-err" class="err-msg" style="display:none;margin-bottom:.75rem"></div>
+    <button class="btn btn-bark btn-full btn-lg" onclick="doRegister()">Create Profile & Continue →</button>
+
+    <div id="existing-wrap" style="margin-top:1.75rem;display:none">
+      <p style="font-size:.82rem;font-weight:600;color:var(--bark2);margin-bottom:.75rem;text-transform:uppercase;letter-spacing:.4px">Existing Profiles</p>
+      <div id="existing-list" style="display:flex;flex-direction:column;gap:.5rem"></div>
+    </div>
+  </div>
+</div>
+
+<!-- =================== BOOKING =================== -->
+<div id="page-book" class="page">
+  <div style="max-width:680px;margin:0 auto;padding:2.5rem 1.5rem">
+    <div id="book-wall" style="display:none;text-align:center;padding:3rem 1rem">
+      <div style="font-size:2.8rem;margin-bottom:1rem">🔒</div>
+      <h2 style="font-family:'DM Serif Display',serif;font-size:1.6rem;color:var(--bark);margin-bottom:.5rem">Login Required</h2>
+      <p style="color:var(--muted);margin-bottom:1.25rem">Register or log in to book a session.</p>
+      <button class="btn btn-bark" onclick="goTo('register')">Register Now →</button>
+    </div>
+
+    <div id="book-content">
+      <div style="margin-bottom:1.75rem">
+        <h2 style="font-size:1.8rem;color:var(--bark);margin-bottom:.35rem">Book a Session</h2>
+        <p style="color:var(--muted);font-size:.9rem" id="book-for-label">Booking for your dog</p>
+      </div>
+
+      <div class="steps" id="step-bar">
+        <div class="step-item active" id="si-1"><div class="step-circle">1</div><div class="step-label">Service</div></div>
+        <div class="step-item" id="si-2"><div class="step-circle">2</div><div class="step-label">Schedule</div></div>
+        <div class="step-item" id="si-3"><div class="step-circle">3</div><div class="step-label">Review</div></div>
+        <div class="step-item" id="si-4"><div class="step-circle">4</div><div class="step-label">Payment</div></div>
+      </div>
+
+      <!-- Step 1: Service -->
+      <div id="bs-1">
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:.75rem;margin-bottom:1.5rem">
+          <div class="svc-card" id="sc-vet" onclick="selectSvc('vet')">
+            <div class="svc-icon">🏥</div>
+            <div class="svc-name">Veterinary Care</div>
+            <div class="svc-desc">Health checks & consultation</div>
+            <div style="margin-top:.6rem"><span class="badge badge-green">฿500</span></div>
+          </div>
+          <div class="svc-card" id="sc-behavior" onclick="selectSvc('behavior')">
+            <div class="svc-icon">🧠</div>
+            <div class="svc-name">Behavioral Correction</div>
+            <div class="svc-desc">Size-matched training programs</div>
+            <div style="margin-top:.6rem"><span class="badge badge-tan">฿800</span></div>
+          </div>
+          <div class="svc-card" id="sc-physical" onclick="selectSvc('physical')">
+            <div class="svc-icon">💪</div>
+            <div class="svc-name">Physical Exercise</div>
+            <div class="svc-desc">Tailored fitness & endurance</div>
+            <div style="margin-top:.6rem"><span class="badge badge-tan">฿1,000</span></div>
+          </div>
+        </div>
+        <div id="match-reveal" style="display:none;margin-bottom:1.25rem" class="fade-up"></div>
+        <button class="btn btn-bark btn-full" id="btn-s1" onclick="goBookStep(2)" disabled>Continue to Schedule →</button>
+      </div>
+
+      <!-- Step 2: Calendar + Slots -->
+      <div id="bs-2" style="display:none">
+        <!-- Pickup Selection -->
+        <div class="card" style="margin-bottom:1rem">
+          <h3 style="font-family:'DM Serif Display',serif;font-size:1rem;color:var(--bark2);margin-bottom:1rem;padding-bottom:.6rem;border-bottom:1px solid var(--sand)">Pickup Arrangement</h3>
+          <div style="display:flex;flex-direction:column;gap:.5rem">
+            <label style="display:flex;align-items:center;gap:.6rem;cursor:pointer;font-size:.9rem;color:var(--bark)">
+              <input type="radio" name="pickup" value="home" checked onclick="selectPickup('home')" style="cursor:pointer;width:18px;height:18px"/>
+              <span>Home Pickup</span>
+              <span style="font-size:.8rem;color:var(--muted)">(We pick up your dog)</span>
+            </label>
+            <label style="display:flex;align-items:center;gap:.6rem;cursor:pointer;font-size:.9rem;color:var(--bark)">
+              <input type="radio" name="pickup" value="dropoff" onclick="selectPickup('dropoff')" style="cursor:pointer;width:18px;height:18px"/>
+              <span>Drop-off at Center</span>
+              <span style="font-size:.8rem;color:var(--muted)">(You bring your dog)</span>
+            </label>
+            <label style="display:flex;align-items:center;gap:.6rem;cursor:pointer;font-size:.9rem;color:var(--bark)">
+              <input type="radio" name="pickup" value="owner-dropoff" onclick="selectPickup('owner-dropoff')" style="cursor:pointer;width:18px;height:18px"/>
+              <span>Owner Drop-off Required</span>
+              <span style="font-size:.8rem;color:var(--muted)">(Must bring dog)</span>
+            </label>
+          </div>
+        </div>
+
+        <div class="card" style="margin-bottom:1rem">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.75rem">
+            <button class="btn btn-outline" style="padding:5px 12px;font-size:.8rem" onclick="changeMonth(-1)">‹</button>
+            <span id="cal-title" style="font-weight:600;color:var(--bark);font-size:.95rem"></span>
+            <button class="btn btn-outline" style="padding:5px 12px;font-size:.8rem" onclick="changeMonth(1)">›</button>
+          </div>
+          <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:2px;margin-bottom:.35rem">
+            <div style="text-align:center;font-size:.72rem;font-weight:600;color:var(--muted);padding:4px">Su</div>
+            <div style="text-align:center;font-size:.72rem;font-weight:600;color:var(--muted);padding:4px">Mo</div>
+            <div style="text-align:center;font-size:.72rem;font-weight:600;color:var(--muted);padding:4px">Tu</div>
+            <div style="text-align:center;font-size:.72rem;font-weight:600;color:var(--muted);padding:4px">We</div>
+            <div style="text-align:center;font-size:.72rem;font-weight:600;color:var(--muted);padding:4px">Th</div>
+            <div style="text-align:center;font-size:.72rem;font-weight:600;color:var(--muted);padding:4px">Fr</div>
+            <div style="text-align:center;font-size:.72rem;font-weight:600;color:var(--muted);padding:4px">Sa</div>
+          </div>
+          <div id="cal-grid" style="display:grid;grid-template-columns:repeat(7,1fr);gap:2px;"></div>
+        </div>
+
+        <div id="slot-section" style="display:none" class="card fade-up">
+          <p style="font-weight:600;font-size:.88rem;color:var(--bark2);margin-bottom:.75rem">Available times on <span id="slot-date-lbl"></span></p>
+          <div id="slot-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(100px,1fr));gap:.5rem"></div>
+        </div>
+
+        <div style="display:flex;gap:.75rem;margin-top:1rem">
+          <button class="btn btn-outline" onclick="goBookStep(1)" style="flex:1">← Back</button>
+          <button class="btn btn-bark" id="btn-s2" onclick="goBookStep(3)" disabled style="flex:2">Review Booking →</button>
+        </div>
+      </div>
+
+      <!-- Step 3: Review -->
+      <div id="bs-3" style="display:none">
+        <div class="card" style="margin-bottom:1rem;border:1.5px solid var(--tan-lt)">
+          <h3 style="font-family:'DM Serif Display',serif;font-size:1.1rem;color:var(--bark);margin-bottom:1rem">Booking Summary</h3>
+          <div id="review-rows"></div>
+          <div style="border-top:1.5px solid var(--sand);margin-top:.75rem;padding-top:.75rem;display:flex;justify-content:space-between;align-items:center">
+            <span style="font-size:.85rem;color:var(--muted)">Total Amount</span>
+            <span id="rev-amount" style="font-family:'DM Serif Display',serif;font-size:1.4rem;color:var(--bark)"></span>
+          </div>
+        </div>
+        <div style="display:flex;gap:.75rem">
+          <button class="btn btn-outline" onclick="goBookStep(2)" style="flex:1">← Back</button>
+          <button class="btn btn-forest btn-lg" onclick="goBookStep(4)" style="flex:2">Proceed to Payment →</button>
+        </div>
+      </div>
+
+      <!-- Step 4: Payment -->
+      <div id="bs-4" style="display:none">
+        <div class="card" style="margin-bottom:1rem">
+          <div style="display:flex;margin-bottom:1.25rem;border-bottom:2px solid var(--sand)">
+            <div class="pay-tab active" id="pt-card" onclick="switchPay('card')">💳 Credit Card</div>
+            <div class="pay-tab" id="pt-promptpay" onclick="switchPay('promptpay')">📱 PromptPay</div>
+          </div>
+
+          <!-- Card form -->
+          <div id="pay-card-form">
+            <div class="field">
+              <label>Cardholder Name</label>
+              <input type="text" id="p-name" placeholder="Name on card"/>
+            </div>
+            <div class="field">
+              <label>Card Number</label>
+              <input type="text" id="p-num" placeholder="•••• •••• •••• ••••" maxlength="19" oninput="fmtCard(this)"/>
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:.75rem">
+              <div class="field"><label>Expiry (MM/YY)</label><input type="text" id="p-exp" placeholder="MM/YY" maxlength="5"/></div>
+              <div class="field"><label>CVV</label><input type="text" id="p-cvv" placeholder="•••" maxlength="3"/></div>
+            </div>
+          </div>
+
+          <!-- PromptPay -->
+          <div id="pay-pp-form" style="display:none;text-align:center">
+            <p style="font-size:.85rem;color:var(--muted);margin-bottom:1rem">Scan the QR code below with your banking app and upload your payment slip.</p>
+            <div class="qr-mock">
+              <div class="qr-inner"></div>
+              <div class="qr-corner qr-tl"></div>
+              <div class="qr-corner qr-tr"></div>
+              <div class="qr-corner qr-bl"></div>
+              <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center">
+                <div style="background:#fff;padding:4px 8px;border-radius:4px;font-size:.65rem;font-weight:700;color:var(--bark);letter-spacing:.5px">BanWang</div>
+              </div>
+            </div>
+            <p style="font-size:.78rem;color:var(--muted);margin:.75rem 0 1rem">PromptPay ID: <strong style="color:var(--bark)">0-9999-99999-99-9</strong></p>
+            <div class="upload-zone" id="upload-zone" onclick="document.getElementById('slip-input').click()">
+              <div style="font-size:1.5rem;margin-bottom:.4rem">📎</div>
+              <div style="font-size:.85rem;font-weight:600;color:var(--bark2)" id="upload-text">Upload Payment Slip</div>
+              <div style="font-size:.75rem;color:var(--muted);margin-top:3px">Click to browse — JPG, PNG or PDF</div>
+            </div>
+            <input type="file" id="slip-input" accept="image/*,.pdf" style="display:none" onchange="handleSlip(this)"/>
+          </div>
+
+          <div style="border-top:1px solid var(--sand);margin-top:1rem;padding-top:.9rem;display:flex;justify-content:space-between;align-items:center">
+            <span style="font-size:.87rem;color:var(--muted)">Amount Due</span>
+            <span id="pay-total" style="font-family:'DM Serif Display',serif;font-size:1.3rem;color:var(--bark)"></span>
+          </div>
+        </div>
+        <div id="p-err" class="err-msg" style="display:none;margin-bottom:.75rem"></div>
+        <div style="display:flex;gap:.75rem">
+          <button class="btn btn-outline" onclick="goBookStep(3)" style="flex:1">← Back</button>
+          <button class="btn btn-forest btn-lg" id="pay-btn" onclick="doPayment()" style="flex:2">Confirm & Pay</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- =================== DASHBOARD =================== -->
+<div id="page-dash" class="page">
+  <div style="max-width:880px;margin:0 auto;padding:2.5rem 1.5rem">
+    <div id="dash-wall" style="display:none;text-align:center;padding:3rem 1rem">
+      <div style="font-size:2.8rem;margin-bottom:1rem">🔒</div>
+      <h2 style="font-family:'DM Serif Display',serif;font-size:1.6rem;color:var(--bark);margin-bottom:.5rem">Please Log In</h2>
+      <p style="color:var(--muted);margin-bottom:1.25rem">Register or log in to see your dashboard.</p>
+      <button class="btn btn-bark" onclick="goTo('register')">Register / Log In →</button>
+    </div>
+
+    <div id="dash-content" style="display:none">
+      <div style="display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:1rem;margin-bottom:1.75rem">
+        <div>
+          <h2 id="dash-title" style="font-size:1.8rem;color:var(--bark);margin-bottom:.3rem">Dashboard</h2>
+          <p id="dash-sub" style="color:var(--muted);font-size:.9rem"></p>
+        </div>
+        <button class="btn btn-forest" onclick="goTo('book')">+ New Booking</button>
+      </div>
+
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:.85rem;margin-bottom:1.75rem">
+        <div class="stat-box"><div class="stat-val" id="ds-total">0</div><div class="stat-lbl">Total Sessions</div></div>
+        <div class="stat-box"><div class="stat-val" id="ds-done">0</div><div class="stat-lbl">Completed</div></div>
+        <div class="stat-box"><div class="stat-val" id="ds-upcoming">0</div><div class="stat-lbl">Upcoming</div></div>
+        <div class="stat-box"><div class="stat-val" id="ds-spent">฿0</div><div class="stat-lbl">Total Spent</div></div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1.25rem">
+        <div class="card">
+          <h3 style="font-family:'DM Serif Display',serif;font-size:1rem;color:var(--bark2);margin-bottom:1rem">Dog Profile</h3>
+          <div style="display:flex;align-items:center;gap:.75rem;margin-bottom:.9rem">
+            <div style="width:48px;height:48px;border-radius:50%;background:var(--sand);display:flex;align-items:center;justify-content:center;font-size:1.6rem;border:2px solid var(--tan-lt)">🐕</div>
+            <div>
+              <div id="dp-name" style="font-weight:700;font-size:1rem;color:var(--bark)"></div>
+              <div id="dp-breed" style="font-size:.8rem;color:var(--muted)"></div>
+            </div>
+          </div>
+          <div id="dp-rows"></div>
+        </div>
+        <div class="card">
+          <h3 style="font-family:'DM Serif Display',serif;font-size:1rem;color:var(--bark2);margin-bottom:1rem">Service Progress</h3>
+          <div id="progress-section"></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3 style="font-family:'DM Serif Display',serif;font-size:1rem;color:var(--bark2);margin-bottom:1rem">Booking History</h3>
+        <div id="booking-history"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Processing Modal -->
+<div id="proc-modal" class="modal-bg" style="display:none">
+  <div class="modal-box" style="text-align:center;max-width:360px">
+    <div id="proc-icon" style="font-size:3rem;margin-bottom:.75rem">⏳</div>
+    <h3 id="proc-title" style="font-family:'DM Serif Display',serif;font-size:1.3rem;color:var(--bark);margin-bottom:.4rem"></h3>
+    <p id="proc-msg" style="font-size:.88rem;color:var(--muted)"></p>
+    <div id="proc-btns" style="display:none;margin-top:1.25rem;display:none"></div>
+  </div>
+</div>
+
+<!-- Success / Record Modal -->
+<div id="rec-modal" class="modal-bg" style="display:none">
+  <div class="modal-box">
+    <div style="text-align:center;margin-bottom:1.5rem">
+      <div class="success-ring">✓</div>
+      <h2 style="font-family:'DM Serif Display',serif;font-size:1.5rem;color:var(--bark);margin-bottom:.25rem">Booking Confirmed!</h2>
+      <p style="font-size:.85rem;color:var(--muted)">Your session has been successfully booked.</p>
+      <div class="id-pill" id="rec-uid"></div>
+    </div>
+
+    <div style="background:var(--sand);border-radius:12px;padding:1.1rem;margin-bottom:1.25rem">
+      <p style="font-size:.72rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:.75rem">Full Booking Record</p>
+      <div id="rec-table"></div>
+    </div>
+
+    <div style="display:flex;gap:.75rem">
+      <button class="btn btn-outline" onclick="closeRec()" style="flex:1">Close</button>
+      <button class="btn btn-bark" onclick="closeRec();goTo('dash')" style="flex:2">Return to Dashboard →</button>
+    </div>
+  </div>
+</div>
+
+<!-- =================== ROLE SELECTOR MODAL =================== -->
+<div id="role-modal" class="role-modal-bg">
+  <div class="role-modal-box">
+    <div style="font-size:2.6rem;margin-bottom:.75rem">🐾</div>
+    <h2 style="font-family:'DM Serif Display',serif;font-size:1.65rem;color:var(--bark);margin-bottom:.3rem">Welcome to BanWang<span style="color:var(--tan)">ChengZhang</span></h2>
+    <p style="color:var(--muted);font-size:.88rem;margin-bottom:1.75rem;line-height:1.5">Please select your role to continue to the appropriate portal.</p>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:.75rem;margin-bottom:1.5rem">
+      <div class="role-card" onclick="selectRole('customer')">
+        <div class="role-icon">👤</div>
+        <div class="role-name">Customer</div>
+        <div class="role-desc">Register & book services for your dog</div>
+      </div>
+      <div class="role-card vet-card" onclick="selectRole('vet')">
+        <div class="role-icon">🩺</div>
+        <div class="role-name">Veterinarian</div>
+        <div class="role-desc">Search patients & record examinations</div>
+      </div>
+      <div class="role-card trainer-card" onclick="selectRole('trainer')">
+        <div class="role-icon">🎯</div>
+        <div class="role-name">Trainer</div>
+        <div class="role-desc">Manage training sessions & schedules</div>
+      </div>
+    </div>
+    <p style="font-size:.72rem;color:var(--muted)">Role-based access controls your available features.</p>
+  </div>
+</div>
+
+<!-- =================== VET PORTAL =================== -->
+<div id="page-vet" class="page">
+
+  <!-- Vet Header -->
+  <div class="vet-header">
+    <div style="position:relative;z-index:1;max-width:720px;margin:0 auto">
+      <div class="vet-badge">🩺 Veterinarian Portal — Process 2</div>
+      <h1 style="font-family:'DM Serif Display',serif;font-size:clamp(1.6rem,4vw,2.4rem);color:#fff;margin-bottom:.4rem">Patient Search & Examination</h1>
+      <p style="color:rgba(255,255,255,.7);font-size:.9rem;margin-bottom:1.5rem">Search by Dog ID or Dog Name to retrieve a patient profile and conduct a medical examination.</p>
+      <div class="vet-search-box">
+        <span style="font-size:1.1rem;color:var(--muted)">🔍</span>
+        <input type="text" id="vet-search-input" placeholder="Search by Dog ID (BW-XXX) or Dog Name..." oninput="vetSearch(this.value)" onkeydown="if(event.key==='Enter')vetSearch(this.value)"/>
+        <button class="btn btn-forest" style="padding:8px 20px;font-size:.85rem" onclick="vetSearch(document.getElementById('vet-search-input').value)">Search</button>
+      </div>
+    </div>
+  </div>
+
+  <div style="max-width:720px;margin:0 auto;padding:2rem 1.5rem">
+
+    <!-- Search Results -->
+    <div id="vet-results-wrap" style="display:none;margin-bottom:1.5rem">
+      <p style="font-size:.8rem;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.4px;margin-bottom:.75rem">Search Results</p>
+      <div id="vet-results-list" style="display:flex;flex-direction:column;gap:.5rem"></div>
+    </div>
+
+    <!-- No results -->
+    <div id="vet-no-results" style="display:none;text-align:center;padding:2rem;background:#fff;border-radius:14px;border:1.5px dashed var(--tan-lt);margin-bottom:1.5rem">
+      <div style="font-size:2rem;margin-bottom:.5rem">🔎</div>
+      <p style="color:var(--muted);font-size:.88rem">No matching patient found. Try a different ID or name.</p>
+    </div>
+
+    <!-- Patient Profile (read-only) -->
+    <div id="vet-profile-wrap" style="display:none">
+
+      <!-- Section 2.1: Patient Profile -->
+      <div class="vet-section" style="margin-bottom:1.25rem">
+        <div class="vet-section-header">
+          <span style="font-size:1.1rem">📋</span>
+          <h4>Patient Profile <span style="font-size:.75rem;font-weight:400;color:var(--muted);font-family:'DM Sans',sans-serif">— Process 2.1 · Read Only</span></h4>
+        </div>
+        <div class="vet-section-body">
+          <div style="display:flex;align-items:center;gap:1rem;margin-bottom:1.25rem">
+            <div class="dog-avatar" style="width:58px;height:58px;font-size:1.8rem;border:2px solid var(--forest)">🐕</div>
+            <div>
+              <div id="vp-dogname" style="font-family:'DM Serif Display',serif;font-size:1.3rem;color:var(--bark)"></div>
+              <div id="vp-breed" style="font-size:.83rem;color:var(--muted)"></div>
+              <div id="vp-examined-badge" style="margin-top:.3rem"></div>
+            </div>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:.5rem">
+            <div style="background:var(--sand);border-radius:10px;padding:.75rem 1rem">
+              <div style="font-size:.72rem;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.3px;margin-bottom:.3rem">Owner</div>
+              <div id="vp-owner" style="font-weight:600;color:var(--bark);font-size:.9rem"></div>
+            </div>
+            <div style="background:var(--sand);border-radius:10px;padding:.75rem 1rem">
+              <div style="font-size:.72rem;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.3px;margin-bottom:.3rem">Phone</div>
+              <div id="vp-phone" style="font-weight:600;color:var(--bark);font-size:.9rem"></div>
+            </div>
+            <div style="background:var(--sand);border-radius:10px;padding:.75rem 1rem">
+              <div style="font-size:.72rem;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.3px;margin-bottom:.3rem">Dog ID</div>
+              <div id="vp-id" style="font-weight:600;color:var(--bark);font-size:.82rem;font-family:monospace"></div>
+            </div>
+            <div style="background:var(--sand);border-radius:10px;padding:.75rem 1rem">
+              <div style="font-size:.72rem;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.3px;margin-bottom:.3rem">Current Health</div>
+              <div id="vp-health" style="font-weight:600;font-size:.9rem"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Section 2.2: Medical Examination Form -->
+      <div class="vet-section" style="margin-bottom:1.25rem">
+        <div class="vet-section-header">
+          <span style="font-size:1.1rem">🩺</span>
+          <h4>Medical Examination <span style="font-size:.75rem;font-weight:400;color:var(--muted);font-family:'DM Sans',sans-serif">— Process 2.2</span></h4>
+        </div>
+        <div class="vet-section-body">
+          <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:.75rem;margin-bottom:.75rem">
+            <div class="field" style="margin:0">
+              <label>Dog Weight (kg) *</label>
+              <input type="number" id="v-weight" min="0.1" max="120" step="0.1" placeholder="e.g. 14.5" style="width:100%"/>
+              <div style="font-size:.7rem;color:var(--forest);margin-top:3px">⚡ Updates matching engine</div>
+            </div>
+            <div class="field" style="margin:0">
+              <label>Heart Rate (BPM)</label>
+              <input type="number" id="v-heartrate" min="40" max="250" placeholder="e.g. 85" style="width:100%"/>
+            </div>
+            <div class="field" style="margin:0">
+              <label>Blood Result Status</label>
+              <select id="v-blood" style="width:100%">
+                <option value="">-- Select --</option>
+                <option value="Normal">Normal</option>
+                <option value="Borderline">Borderline</option>
+                <option value="Abnormal — Follow-up Required">Abnormal — Follow-up</option>
+                <option value="Critical — Urgent Care">Critical — Urgent</option>
+              </select>
+            </div>
+          </div>
+          <div class="field" style="margin-bottom:.75rem">
+            <label>Allergy Warning</label>
+            <textarea id="v-allergy" rows="2" placeholder="Flag specific food or treatment sensitivities (e.g. penicillin, chicken protein, latex)..." style="width:100%;resize:vertical"></textarea>
+          </div>
+          <div class="field" style="margin-bottom:1rem">
+            <label>Health Constraints</label>
+            <textarea id="v-constraints" rows="2" placeholder="List physical exercise limitations (e.g. no high-impact activity, limit run to 20 min, avoid water immersion)..." style="width:100%;resize:vertical"></textarea>
+          </div>
+
+          <!-- Report Upload -->
+          <div style="margin-bottom:1rem">
+            <label style="display:block;font-size:.82rem;font-weight:600;color:var(--bark2);margin-bottom:.5rem;letter-spacing:.2px;text-transform:uppercase">Digital Examination Report</label>
+            <div id="vet-upload-zone" class="upload-zone" onclick="document.getElementById('vet-report-input').click()" style="cursor:pointer">
+              <div id="vet-upload-icon" style="font-size:1.6rem;margin-bottom:.35rem">📄</div>
+              <div id="vet-upload-text" style="font-size:.85rem;font-weight:600;color:var(--bark2)">Upload Examination Report</div>
+              <div id="vet-upload-sub" style="font-size:.74rem;color:var(--muted);margin-top:3px">Click to browse — PDF, JPG, or PNG</div>
+            </div>
+            <input type="file" id="vet-report-input" accept=".pdf,image/*" style="display:none" onchange="handleVetReport(this)"/>
+          </div>
+
+          <div id="v-form-err" class="err-msg" style="display:none;margin-bottom:.5rem"></div>
+          <button class="btn btn-forest btn-full" onclick="showVetReview()">Preview Summary Before Saving →</button>
+        </div>
+      </div>
+
+      <!-- Medical History -->
+      <div class="vet-section">
+        <div class="vet-section-header">
+          <span style="font-size:1.1rem">📜</span>
+          <h4>Digital History Record</h4>
+        </div>
+        <div class="vet-section-body" id="vet-history-body">
+          <p style="font-size:.84rem;color:var(--muted);text-align:center;padding:.5rem 0">No examination records yet.</p>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Empty state -->
+    <div id="vet-empty-state" style="text-align:center;padding:4rem 1rem">
+      <div style="font-size:3.5rem;margin-bottom:1rem">🔍</div>
+      <h3 style="font-family:'DM Serif Display',serif;font-size:1.4rem;color:var(--bark);margin-bottom:.5rem">Search for a Patient</h3>
+      <p style="color:var(--muted);font-size:.88rem;max-width:320px;margin:0 auto">Enter a Dog ID (e.g. BW-ABC123) or dog name to retrieve the patient profile and begin examination.</p>
+    </div>
+
+  </div>
+</div>
+
+<!-- Vet Review / Save Modal -->
+<div id="vet-review-modal" class="modal-bg" style="display:none">
+  <div class="modal-box" style="max-width:500px">
+    <div style="text-align:center;margin-bottom:1.5rem">
+      <div style="font-size:2.4rem;margin-bottom:.5rem">📋</div>
+      <h2 style="font-family:'DM Serif Display',serif;font-size:1.4rem;color:var(--bark);margin-bottom:.25rem">Review Examination Summary</h2>
+      <p style="font-size:.83rem;color:var(--muted)">Please confirm all details before saving to the patient record.</p>
+    </div>
+    <div id="vet-review-content" style="background:var(--sand);border-radius:12px;padding:1.1rem;margin-bottom:1.25rem"></div>
+    <div style="background:var(--forest-lt);border:1.5px solid var(--forest);border-radius:10px;padding:.85rem 1rem;margin-bottom:1.25rem;display:flex;align-items:flex-start;gap:.6rem">
+      <span style="font-size:1.1rem;margin-top:1px">✅</span>
+      <div style="font-size:.82rem;color:var(--forest)"><strong>Saving will:</strong> update the global dog record, set examination status to <em>Examined</em>, and unlock training service bookings for this patient.</div>
+    </div>
+    <div style="display:flex;gap:.75rem">
+      <button class="btn btn-outline" onclick="document.getElementById('vet-review-modal').style.display='none'" style="flex:1">← Edit</button>
+      <button class="btn btn-forest btn-lg" onclick="saveVetExam()" style="flex:2">💾 Save & Update Record</button>
+    </div>
+  </div>
+</div>
+
+<!-- Vet Save Success Modal -->
+<div id="vet-success-modal" class="modal-bg" style="display:none">
+  <div class="modal-box" style="max-width:400px;text-align:center">
+    <div class="success-ring" style="background:var(--forest-lt);border-color:var(--forest)">✓</div>
+    <h2 style="font-family:'DM Serif Display',serif;font-size:1.4rem;color:var(--bark);margin-bottom:.35rem">Record Saved!</h2>
+    <p style="font-size:.85rem;color:var(--muted);margin-bottom:.75rem">The examination has been recorded and the patient profile has been updated.</p>
+    <div id="vet-success-details" style="background:var(--sand);border-radius:10px;padding:.85rem;margin-bottom:1.25rem;font-size:.83rem;text-align:left"></div>
+    <button class="btn btn-forest btn-full" onclick="document.getElementById('vet-success-modal').style.display='none';vetClearForm()">✓ Done — Search Another Patient</button>
+  </div>
+</div>
+
+<!-- Trainer Coming Soon Modal (placeholder) -->
+<div id="trainer-modal" class="modal-bg" style="display:none">
+  <div class="modal-box" style="max-width:360px;text-align:center">
+    <div style="font-size:3rem;margin-bottom:.75rem">🎯</div>
+    <h2 style="font-family:'DM Serif Display',serif;font-size:1.4rem;color:var(--bark);margin-bottom:.4rem">Trainer Portal</h2>
+    <p style="color:var(--muted);font-size:.88rem;margin-bottom:1.25rem">The Trainer dashboard is coming soon. It will display assigned training sessions, dog progress, and exercise programs.</p>
+    <button class="btn btn-bark btn-full" onclick="selectRole('customer')">Continue as Customer Instead</button>
+  </div>
+</div>
+
+<script>
+/* ===== DATA STORE ===== */
+const DB = {
+  users: JSON.parse(localStorage.getItem('bw_users')||'[]'),
+  bookings: JSON.parse(localStorage.getItem('bw_bookings')||'[]'),
+  current: JSON.parse(localStorage.getItem('bw_cur')||'null'),
+  save(){
+    localStorage.setItem('bw_users',JSON.stringify(this.users));
+    localStorage.setItem('bw_bookings',JSON.stringify(this.bookings));
+    localStorage.setItem('bw_cur',JSON.stringify(this.current));
+  }
+};
+
+const SVC = {
+  vet:      {name:'Veterinary Care',      icon:'🏥', price:500,  needsClear:false},
+  behavior: {name:'Behavioral Correction',icon:'🧠', price:800,  needsClear:false},
+  physical: {name:'Physical Exercise',    icon:'💪', price:1000, needsClear:false}
+};
+
+const CATS = {
+  toy:    {label:'Toy (<4kg)',      color:'#7C3AED', bg:'#EDE9FE', prog:['Scent Work','Gentle Play']},
+  small:  {label:'Small (4–10kg)',  color:'#1D4ED8', bg:'#DBEAFE', prog:['Swimming','Hydrotherapy']},
+  medium: {label:'Medium (11–25kg)',color:'#2D5A3D', bg:'#E4EFE8', prog:['Agility','Task Drills']},
+  large:  {label:'Large (>25kg)',   color:'#3D2B1F', bg:'#F5EDE3', prog:['Endurance','Resistance']}
+};
+
+const BLOCKED = {toy:[0,3],small:[1,4],medium:[2,5],large:[0,6],vet:[],wellness:[]};
+const TIMES = {
+  toy:    ['09:00','10:00','14:00','15:00'],
+  small:  ['08:30','10:30','13:30','15:30'],
+  medium: ['09:30','11:00','14:30','16:00'],
+  large:  ['08:00','10:00','14:00','16:30'],
+  vet:    ['09:00','10:00','11:00','13:00','14:00','15:00','16:00']
+};
+
+/* ===== STATE ===== */
+const S = {
+  svc: null, cat: null, prog: null,
+  date: null, time: null, amount: 0,
+  pickup: 'home',
+  calY: new Date().getFullYear(),
+  calM: new Date().getMonth(),
+  payMode: 'card', slipFile: null
+};
+
+/* ===== UTILS ===== */
+function genId(){return 'BW-'+Math.random().toString(36).slice(2,5).toUpperCase()+Math.floor(100+Math.random()*900);}
+function categorize(w){return w<4?'toy':w<=10?'small':w<=25?'medium':'large';}
+function fmt(n){return '฿'+n.toLocaleString();}
+function fmtCard(el){let v=el.value.replace(/\D/g,'').slice(0,16);el.value=v.replace(/(.{4})/g,'$1 ').trim();}
+function dateStr(d){return d.toISOString().slice(0,10);}
+function today(){let d=new Date();d.setHours(0,0,0,0);return d;}
+
+/* ===== ROLE SYSTEM ===== */
+let CURRENT_ROLE = null;
+let VET_SELECTED_DOG = null;
+let VET_REPORT_FILE = null;
+
+function selectRole(role) {
+  CURRENT_ROLE = role;
+  document.getElementById('role-modal').style.display = 'none';
+  document.getElementById('trainer-modal').style.display = 'none';
+  
+  if (role === 'trainer') {
+    document.getElementById('trainer-modal').style.display = 'flex';
+    return;
+  }
+  
+  const nav = document.querySelector('nav');
+  const navLinks = document.getElementById('nav-links-wrap');
+  
+  if (role === 'vet') {
+    nav.classList.add('vet-mode');
+    // Show vet nav indicator, hide customer nav buttons
+    document.getElementById('nb-register').style.display = 'none';
+    document.getElementById('nb-book').style.display = 'none';
+    document.getElementById('nb-dash').style.display = 'none';
+    document.getElementById('nb-user').style.display = 'none';
+    document.getElementById('vet-nav-indicator').style.display = 'flex';
+    document.getElementById('nb-vet').style.display = 'inline-flex';
+    goTo('vet');
+  } else {
+    nav.classList.remove('vet-mode');
+    document.getElementById('nb-register').style.display = '';
+    document.getElementById('nb-book').style.display = '';
+    document.getElementById('nb-dash').style.display = '';
+    document.getElementById('nb-user').style.display = '';
+    document.getElementById('vet-nav-indicator').style.display = 'none';
+    document.getElementById('nb-vet').style.display = 'none';
+    goTo('home');
+  }
+}
+
+function switchRole() {
+  document.getElementById('role-modal').style.display = 'flex';
+}
+
+/* ===== NAV ===== */
+function goTo(p){
+  document.querySelectorAll('.page').forEach(x=>x.classList.remove('active'));
+  document.getElementById('page-'+p).classList.add('active');
+  document.querySelectorAll('.nav-btn').forEach(x=>x.classList.remove('active'));
+  const nb=document.getElementById('nb-'+p);
+  if(nb) nb.classList.add('active');
+  if(p==='book')  initBook();
+  if(p==='dash')  initDash();
+  if(p==='register') renderExisting();
+  if(p==='vet') initVet();
+  window.scrollTo(0,0);
+}
+
+function updateNavUser(){
+  const btn=document.getElementById('nb-user');
+  if(DB.current){btn.textContent='🐕 '+DB.current.dogName;btn.style.background='var(--forest)';}
+  else{btn.textContent='Log In';btn.style.background='';}
+}
+function handleUserBtn(){
+  if(DB.current){if(confirm('Log out of '+DB.current.dogName+'?')){DB.current=null;DB.save();updateNavUser();goTo('home');}}
+  else goTo('register');
+}
+
+/* ===== REGISTER ===== */
+function doRegister(){
+  const owner=document.getElementById('r-owner').value.trim();
+  const phone=document.getElementById('r-phone').value.trim();
+  const dog=document.getElementById('r-dog').value.trim();
+  const wt=parseFloat(document.getElementById('r-weight').value);
+  const breed=document.getElementById('r-breed').value;
+  const health=document.getElementById('r-health').value;
+  const err=document.getElementById('r-err');
+  if(!owner||!phone||!dog||!wt||!breed){err.textContent='Please fill all required fields.';err.style.display='block';return;}
+  err.style.display='none';
+  const u={id:genId(),ownerName:owner,phone,dogName:dog,weight:wt,breed,health,category:categorize(wt),createdAt:new Date().toISOString()};
+  DB.users.push(u);DB.current=u;DB.save();
+  updateNavUser();
+  ['r-owner','r-phone','r-dog','r-weight'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('r-breed').value='';
+  document.getElementById('r-health').value='Cleared';
+  goTo('dash');
+}
+
+function renderExisting(){
+  const wrap=document.getElementById('existing-wrap');
+  const list=document.getElementById('existing-list');
+  if(!DB.users.length){wrap.style.display='none';return;}
+  wrap.style.display='block';
+  list.innerHTML=DB.users.map(u=>`
+    <div style="background:#fff;border:1.5px solid var(--tan-lt);border-radius:10px;padding:.7rem 1rem;display:flex;align-items:center;justify-content:space-between;cursor:pointer" onclick="loginAs('${u.id}')">
+      <div><span style="font-weight:600;color:var(--bark)">${u.dogName}</span> <span style="font-size:.8rem;color:var(--muted)">${u.breed} · ${u.weight}kg</span></div>
+      <div style="display:flex;align-items:center;gap:.5rem">
+        <span class="badge ${u.health==='Cleared'?'badge-green':u.health==='Pending'?'badge-tan':'badge-red'}">${u.health}</span>
+        <span style="font-size:.75rem;color:var(--forest);font-weight:600">Login →</span>
+      </div>
+    </div>`).join('');
+}
+
+function loginAs(id){
+  const u=DB.users.find(x=>x.id===id);
+  if(!u)return;
+  DB.current=u;DB.save();updateNavUser();goTo('dash');
+}
+
+/* ===== BOOKING ===== */
+function initBook(){
+  if(!DB.current){document.getElementById('book-wall').style.display='block';document.getElementById('book-content').style.display='none';return;}
+  document.getElementById('book-wall').style.display='none';
+  document.getElementById('book-content').style.display='block';
+  document.getElementById('book-for-label').textContent='Booking for: '+DB.current.dogName+' ('+DB.current.ownerName+')';
+  goBookStep(1);
+  S.svc=null;S.date=null;S.time=null;
+  document.querySelectorAll('.svc-card').forEach(c=>c.classList.remove('selected'));
+  document.getElementById('match-reveal').style.display='none';
+  document.getElementById('btn-s1').disabled=true;
+}
+
+function selectSvc(key){
+  // Check if training service requires examination clearance
+  if((key==='behavior'||key==='physical')&&DB.current&&DB.current.isExamined===false){
+    const mr=document.getElementById('match-reveal');
+    mr.style.display='block';
+    mr.innerHTML=`<div style="background:#FEF2F2;border:1.5px solid #FECACA;border-radius:10px;padding:1rem">
+      <div style="font-weight:700;font-size:.85rem;color:var(--danger);margin-bottom:.3rem">🔒 Examination Required</div>
+      <div style="font-size:.82rem;color:var(--bark)"><strong>${DB.current.dogName}</strong> has not yet completed a veterinary examination. Training services are locked until cleared by a veterinarian.</div>
+      <div style="font-size:.78rem;color:var(--muted);margin-top:.4rem">Please visit the clinic to complete an examination first.</div>
+    </div>`;
+    document.getElementById('btn-s1').disabled=true;
+    document.querySelectorAll('.svc-card').forEach(c=>c.classList.remove('selected'));
+    document.getElementById('sc-'+key).classList.add('selected');
+    return;
+  }
+
+  S.svc=key;
+  document.querySelectorAll('.svc-card').forEach(c=>c.classList.remove('selected'));
+  document.getElementById('sc-'+key).classList.add('selected');
+  document.getElementById('btn-s1').disabled=false;
+  S.amount=SVC[key].price;
+
+  const mr=document.getElementById('match-reveal');
+  if(key==='behavior'||key==='physical'){
+    const cat=DB.current.category;
+    S.cat=cat;S.prog=CATS[cat].prog[0];
+    const c=CATS[cat];
+    mr.style.display='block';
+    mr.innerHTML=`<div style="background:${c.bg};border:1.5px solid ${c.color}33;border-radius:10px;padding:1rem">
+      <div style="font-weight:600;font-size:.85rem;color:${c.color};margin-bottom:.3rem">Smart Match</div>
+      <div style="font-size:.83rem;color:var(--bark)"><strong>${DB.current.dogName}</strong> at ${DB.current.weight}kg → <strong>${c.label}</strong></div>
+      <div style="margin-top:.5rem;display:flex;gap:.4rem;flex-wrap:wrap">${c.prog.map(p=>`<span style="background:${c.color};color:#fff;padding:3px 10px;border-radius:12px;font-size:.75rem;font-weight:600">${p}</span>`).join('')}</div>
+    </div>`;
+  } else {
+    S.cat='vet';S.prog='General Consultation';
+    mr.style.display='none';
+  }
+}
+
+function goBookStep(n){
+  for(let i=1;i<=4;i++){
+    const s=document.getElementById('bs-'+i); if(s) s.style.display=i===n?'block':'none';
+    const si=document.getElementById('si-'+i);
+    if(si){si.className='step-item';if(i<n)si.classList.add('done');if(i===n)si.classList.add('active');}
+  }
+  if(n===2){renderCal();document.getElementById('slot-section').style.display='none';document.getElementById('btn-s2').disabled=true;}
+  if(n===3) buildReview();
+  if(n===4){document.getElementById('pay-total').textContent=fmt(S.amount);document.getElementById('p-name').value=DB.current.ownerName;}
+}
+
+/* ===== CALENDAR ===== */
+function renderCal(){
+  const y=S.calY,m=S.calM;
+  const months=['January','February','March','April','May','June','July','August','September','October','November','December'];
+  document.getElementById('cal-title').textContent=months[m]+' '+y;
+  const firstDay=new Date(y,m,1).getDay();
+  const days=new Date(y,m+1,0).getDate();
+  const td=today();
+  const cat=(S.svc==='vet'||S.svc==='wellness')?'vet':S.cat;
+  const blocked=BLOCKED[cat]||[];
+  const grid=document.getElementById('cal-grid');
+  grid.innerHTML='';
+  for(let i=0;i<firstDay;i++){const e=document.createElement('div');e.className='cal-day empty';grid.appendChild(e);}
+  for(let d=1;d<=days;d++){
+    const dt=new Date(y,m,d);
+    const cell=document.createElement('div');
+    const past=dt<td;
+    const blk=blocked.includes(dt.getDay());
+    const ds=dateStr(dt);
+    cell.className='cal-day'+(past||blk?' disabled':'');
+    if(!past&&!blk&&dt.getTime()===td.getTime()) cell.classList.add('today');
+    if(S.date===ds) cell.classList.add('selected');
+    cell.textContent=d;
+    if(!past&&!blk) cell.onclick=()=>pickDate(ds,cell);
+    grid.appendChild(cell);
+  }
+}
+function changeMonth(d){
+  S.calM+=d;
+  if(S.calM>11){S.calM=0;S.calY++;}
+  if(S.calM<0){S.calM=11;S.calY--;}
+  renderCal();
+}
+function pickDate(ds,cell){
+  document.querySelectorAll('.cal-day').forEach(c=>c.classList.remove('selected'));
+  cell.classList.add('selected');
+  S.date=ds;S.time=null;
+  document.getElementById('btn-s2').disabled=true;
+  renderSlots(ds);
+}
+function renderSlots(ds){
+  const sec=document.getElementById('slot-section');
+  sec.style.display='block';
+  const dt=new Date(ds+'T00:00:00');
+  const days=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+  document.getElementById('slot-date-lbl').textContent=days[dt.getDay()]+', '+ds;
+  const cat=(S.svc==='vet')?'vet':S.cat;
+  const times=TIMES[cat]||TIMES.vet;
+  const booked=DB.bookings.filter(b=>b.date===ds).map(b=>b.time);
+  const grid=document.getElementById('slot-grid');
+  grid.innerHTML=times.map(t=>{
+    const busy=booked.includes(t);
+    return `<div class="time-slot${busy?' booked':''}" onclick="pickTime('${t}',this)">${t}${busy?'<br><span style="font-size:.68rem">Booked</span>':''}</div>`;
+  }).join('');
+}
+function pickTime(t,el){
+  document.querySelectorAll('.time-slot').forEach(s=>s.classList.remove('selected'));
+  el.classList.add('selected');
+  S.time=t;
+  document.getElementById('btn-s2').disabled=false;
+}
+
+function selectPickup(method){
+  S.pickup=method;
+}
+
+/* ===== REVIEW ===== */
+function buildReview(){
+  const u=DB.current;
+  const isTraining=S.svc==='behavior'||S.svc==='physical';
+  const catData=CATS[S.cat];
+  const pickupLabels={home:'Home Pickup',dropoff:'Drop-off at Center','owner-dropoff':'Owner Drop-off Required'};
+  const rows=[
+    ['Owner',u.ownerName],['Phone',u.phone],
+    ['Dog',u.dogName],['Breed',u.breed],['Weight',u.weight+' kg'],
+    ['Category', isTraining ? (catData?catData.label:'—') : 'N/A'],
+    ['Service',SVC[S.svc].icon+' '+SVC[S.svc].name],
+    ['Program',S.prog],
+    ['Date & Time',S.date+' @ '+S.time],
+    ['Pickup Method',pickupLabels[S.pickup]]
+  ];
+  document.getElementById('review-rows').innerHTML=rows.map(([l,v])=>`<div class="rec-row"><div class="rec-lbl">${l}</div><div class="rec-val">${v}</div></div>`).join('');
+  document.getElementById('rev-amount').textContent=fmt(S.amount);
+}
+
+/* ===== PAYMENT ===== */
+function switchPay(m){
+  S.payMode=m;
+  document.getElementById('pay-card-form').style.display=m==='card'?'block':'none';
+  document.getElementById('pay-pp-form').style.display=m==='promptpay'?'block':'none';
+  document.getElementById('pt-card').className='pay-tab'+(m==='card'?' active':'');
+  document.getElementById('pt-promptpay').className='pay-tab'+(m==='promptpay'?' active':'');
+}
+function handleSlip(inp){
+  S.slipFile=inp.files[0];
+  if(S.slipFile){
+    const z=document.getElementById('upload-zone');
+    z.classList.add('has-file');
+    document.getElementById('upload-text').textContent='Slip uploaded: '+S.slipFile.name.slice(0,28);
+  }
+}
+
+function doPayment(){
+  const err=document.getElementById('p-err');
+  if(S.payMode==='card'){
+    const n=document.getElementById('p-name').value.trim();
+    const num=document.getElementById('p-num').value.replace(/\s/g,'');
+    const exp=document.getElementById('p-exp').value.trim();
+    const cvv=document.getElementById('p-cvv').value.trim();
+    if(!n||num.length<16||exp.length<5||cvv.length<3){err.textContent='Please fill in all card details.';err.style.display='block';return;}
+  } else {
+    if(!S.slipFile){err.textContent='Please upload your PromptPay payment slip.';err.style.display='block';return;}
+  }
+  err.style.display='none';
+  showProc('Processing...','Verifying payment securely...');
+  setTimeout(()=>{
+    showProc('Confirmed!','Your payment was accepted. Generating record...');
+    setTimeout(()=>{
+      document.getElementById('proc-modal').style.display='none';
+      finalise();
+    },1200);
+  },2000);
+}
+function showProc(title,msg){
+  document.getElementById('proc-modal').style.display='flex';
+  document.getElementById('proc-icon').textContent='⏳';
+  document.getElementById('proc-title').textContent=title;
+  document.getElementById('proc-msg').textContent=msg;
+}
+
+function finalise(){
+  const u=DB.current;
+  const isTraining=S.svc==='behavior'||S.svc==='physical';
+  const catData=CATS[S.cat];
+  const pickupLabels={home:'Home Pickup',dropoff:'Drop-off at Center','owner-dropoff':'Owner Drop-off Required'};
+  const bk={
+    uid:genId(), userId:u.id,
+    ownerName:u.ownerName, phone:u.phone,
+    dogName:u.dogName, breed:u.breed, weight:u.weight,
+    health:u.health,
+    category:isTraining?(catData?catData.label:'N/A'):'N/A',
+    service:SVC[S.svc].name, svcKey:S.svc,
+    program:S.prog, date:S.date, time:S.time,
+    pickup:S.pickup, pickupLabel:pickupLabels[S.pickup],
+    amount:S.amount, payMode:S.payMode,
+    status:'confirmed', createdAt:new Date().toISOString()
+  };
+  DB.bookings.push(bk);DB.save();
+  showRecord(bk);
+}
+
+function showRecord(bk){
+  document.getElementById('rec-uid').textContent=bk.uid;
+  const rows=[
+    ['Dog ID',bk.uid],['Owner',bk.ownerName],['Phone',bk.phone],
+    ['Dog Name',bk.dogName],['Breed',bk.breed],['Weight',bk.weight+' kg'],
+    ['Category',bk.category],['Service',bk.service],
+    ['Program',bk.program],['Date',bk.date],['Time',bk.time],
+    ['Pickup Method',bk.pickupLabel],
+    ['Payment',bk.payMode==='card'?'Credit Card':'PromptPay'],
+    ['Amount',fmt(bk.amount)],['Status','CONFIRMED']
+  ];
+  document.getElementById('rec-table').innerHTML=rows.map(([l,v])=>`<div class="rec-row"><div class="rec-lbl">${l}</div><div class="rec-val">${v}</div></div>`).join('');
+  document.getElementById('rec-modal').style.display='flex';
+}
+function closeRec(){document.getElementById('rec-modal').style.display='none';}
+
+/* ===== DASHBOARD ===== */
+function initDash(){
+  if(!DB.current){document.getElementById('dash-wall').style.display='block';document.getElementById('dash-content').style.display='none';return;}
+  document.getElementById('dash-wall').style.display='none';
+  document.getElementById('dash-content').style.display='block';
+  const u=DB.current;
+  document.getElementById('dash-title').textContent='Welcome, '+u.ownerName.split(' ')[0]+'!';
+  document.getElementById('dash-sub').textContent=u.dogName+' · '+u.breed+' · '+u.weight+'kg';
+  document.getElementById('dp-name').textContent=u.dogName;
+  document.getElementById('dp-breed').textContent=u.breed;
+  const cat=CATS[u.category];
+  document.getElementById('dp-rows').innerHTML=[
+    ['Owner',u.ownerName],['Phone',u.phone],['Weight',u.weight+' kg'],
+    ['Category',`<span class="badge badge-green">${cat?cat.label:u.category}</span>`],
+    ['Health',`<span class="badge ${u.health==='Cleared'?'badge-green':u.health==='Pending'?'badge-tan':'badge-red'}">${u.health}</span>`]
+  ].map(([l,v])=>`<div style="display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid var(--sand);font-size:.83rem"><span style="color:var(--muted);font-weight:500">${l}</span><span>${v}</span></div>`).join('');
+  
+  const myBk=DB.bookings.filter(b=>b.userId===u.id);
+  const now=dateStr(new Date());
+  const done=myBk.filter(b=>b.date<now).length;
+  const upcoming=myBk.filter(b=>b.date>=now).length;
+  const spent=myBk.reduce((s,b)=>s+b.amount,0);
+  document.getElementById('ds-total').textContent=myBk.length;
+  document.getElementById('ds-done').textContent=done;
+  document.getElementById('ds-upcoming').textContent=upcoming;
+  document.getElementById('ds-spent').textContent=fmt(spent);
+
+  const progSec=document.getElementById('progress-section');
+  const svcCounts={vet:0,behavior:0,physical:0};
+  myBk.forEach(b=>{if(svcCounts[b.svcKey]!==undefined)svcCounts[b.svcKey]++;});
+  const maxes={vet:5,behavior:10,physical:10};
+  progSec.innerHTML=Object.entries(svcCounts).map(([k,n])=>{
+    const pct=Math.min(100,Math.round(n/maxes[k]*100));
+    return `<div style="margin-bottom:.85rem">
+      <div style="display:flex;justify-content:space-between;font-size:.8rem;margin-bottom:4px">
+        <span style="font-weight:500;color:var(--bark)">${SVC[k].icon} ${SVC[k].name}</span>
+        <span style="color:var(--muted)">${n} sessions</span>
+      </div>
+      <div class="prog-track"><div class="prog-fill" style="width:${pct}%"></div></div>
+    </div>`;
+  }).join('');
+
+  const hist=document.getElementById('booking-history');
+  if(!myBk.length){hist.innerHTML='<p style="font-size:.85rem;color:var(--muted);text-align:center;padding:1.25rem 0">No bookings yet. Book your first session!</p>';return;}
+  const sorted=[...myBk].sort((a,b)=>b.createdAt.localeCompare(a.createdAt));
+  hist.innerHTML=sorted.map(b=>{
+    const past=b.date<dateStr(new Date());
+    return `<div style="background:var(--sand);border-radius:10px;padding:.85rem 1rem;margin-bottom:.6rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.5rem">
+      <div>
+        <div style="font-weight:600;font-size:.88rem;color:var(--bark)">${b.service} <span style="font-size:.75rem;font-weight:500;color:var(--muted)">— ${b.program}</span></div>
+        <div style="font-size:.77rem;color:var(--muted);margin-top:2px">${b.date} @ ${b.time} · ${b.dogName}</div>
+        <div style="font-size:.75rem;color:var(--muted);margin-top:2px">🚗 ${b.pickupLabel||'Standard Pickup'}</div>
+        <div style="font-size:.72rem;color:var(--muted);font-family:monospace;margin-top:2px">${b.uid}</div>
+      </div>
+      <div style="text-align:right">
+        <div style="font-weight:700;color:var(--bark);font-family:'DM Serif Display',serif;font-size:1rem">${fmt(b.amount)}</div>
+        <div style="margin-top:3px"><span class="badge ${past?'badge-green':'badge-blue'}">${past?'Completed':'Upcoming'}</span></div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+/* ===== VET PORTAL ===== */
+function initVet() {
+  VET_SELECTED_DOG = null;
+  VET_REPORT_FILE = null;
+  document.getElementById('vet-search-input').value = '';
+  document.getElementById('vet-results-wrap').style.display = 'none';
+  document.getElementById('vet-no-results').style.display = 'none';
+  document.getElementById('vet-profile-wrap').style.display = 'none';
+  document.getElementById('vet-empty-state').style.display = 'block';
+}
+
+function vetSearch(query) {
+  query = query.trim().toLowerCase();
+  if (!query) {
+    document.getElementById('vet-results-wrap').style.display = 'none';
+    document.getElementById('vet-no-results').style.display = 'none';
+    document.getElementById('vet-empty-state').style.display = 'block';
+    document.getElementById('vet-profile-wrap').style.display = 'none';
+    return;
+  }
+  const matches = DB.users.filter(u =>
+    u.id.toLowerCase().includes(query) ||
+    u.dogName.toLowerCase().includes(query) ||
+    u.ownerName.toLowerCase().includes(query)
+  );
+  document.getElementById('vet-empty-state').style.display = 'none';
+  document.getElementById('vet-profile-wrap').style.display = 'none';
+  if (!matches.length) {
+    document.getElementById('vet-results-wrap').style.display = 'none';
+    document.getElementById('vet-no-results').style.display = 'block';
+    return;
+  }
+  document.getElementById('vet-no-results').style.display = 'none';
+  document.getElementById('vet-results-wrap').style.display = 'block';
+  document.getElementById('vet-results-list').innerHTML = matches.map(u => {
+    const examBadge = u.isExamined
+      ? `<span class="badge badge-green">Examined</span>`
+      : `<span class="badge badge-tan">Pending Exam</span>`;
+    return `<div class="dog-result-item" onclick="vetSelectDog('${u.id}')">
+      <div class="dog-avatar">🐕</div>
+      <div style="flex:1">
+        <div style="font-weight:700;color:var(--bark);font-size:.92rem">${u.dogName} <span style="font-size:.78rem;font-weight:400;color:var(--muted)">· ${u.breed}</span></div>
+        <div style="font-size:.78rem;color:var(--muted);margin-top:1px">Owner: ${u.ownerName} &nbsp;|&nbsp; ${u.weight}kg</div>
+        <div style="font-size:.72rem;color:var(--muted);font-family:monospace;margin-top:1px">${u.id}</div>
+      </div>
+      <div style="text-align:right;display:flex;flex-direction:column;align-items:flex-end;gap:.3rem">
+        ${examBadge}
+        <span style="font-size:.75rem;color:var(--forest);font-weight:600">Select →</span>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function vetSelectDog(id) {
+  const u = DB.users.find(x => x.id === id);
+  if (!u) return;
+  VET_SELECTED_DOG = u;
+  VET_REPORT_FILE = null;
+
+  // Hide search results, show profile
+  document.getElementById('vet-results-wrap').style.display = 'none';
+  document.getElementById('vet-no-results').style.display = 'none';
+  document.getElementById('vet-empty-state').style.display = 'none';
+  document.getElementById('vet-profile-wrap').style.display = 'block';
+
+  // Populate read-only profile
+  document.getElementById('vp-dogname').textContent = u.dogName;
+  document.getElementById('vp-breed').textContent = u.breed;
+  document.getElementById('vp-owner').textContent = u.ownerName;
+  document.getElementById('vp-phone').textContent = u.phone;
+  document.getElementById('vp-id').textContent = u.id;
+  const hEl = document.getElementById('vp-health');
+  hEl.innerHTML = `<span class="badge ${u.health==='Cleared'?'badge-green':u.health==='Pending'?'badge-tan':'badge-red'}">${u.health}</span>`;
+
+  const examBadgeEl = document.getElementById('vp-examined-badge');
+  examBadgeEl.innerHTML = u.isExamined
+    ? `<span class="badge badge-green">✓ Examination on file · Training Unlocked</span>`
+    : `<span class="badge badge-tan">No prior examination on file</span>`;
+
+  // Pre-fill weight from existing record
+  document.getElementById('v-weight').value = u.weight || '';
+  document.getElementById('v-heartrate').value = u.heartRate || '';
+  document.getElementById('v-blood').value = u.bloodResult || '';
+  document.getElementById('v-allergy').value = u.allergyWarning || '';
+  document.getElementById('v-constraints').value = u.healthConstraints || '';
+
+  // Reset upload UI
+  const zone = document.getElementById('vet-upload-zone');
+  zone.classList.remove('has-file');
+  document.getElementById('vet-upload-icon').textContent = '📄';
+  document.getElementById('vet-upload-text').textContent = 'Upload Examination Report';
+  document.getElementById('vet-upload-sub').textContent = 'Click to browse — PDF, JPG, or PNG';
+
+  // Render history
+  renderVetHistory(u);
+
+  // Scroll to profile
+  setTimeout(() => document.getElementById('vet-profile-wrap').scrollIntoView({behavior:'smooth', block:'start'}), 100);
+}
+
+function handleVetReport(inp) {
+  VET_REPORT_FILE = inp.files[0];
+  if (VET_REPORT_FILE) {
+    const zone = document.getElementById('vet-upload-zone');
+    zone.classList.add('has-file');
+    document.getElementById('vet-upload-icon').textContent = '✅';
+    document.getElementById('vet-upload-text').textContent = 'Report Uploaded Successfully';
+    document.getElementById('vet-upload-sub').textContent = VET_REPORT_FILE.name.slice(0, 36) + (VET_REPORT_FILE.name.length > 36 ? '...' : '');
+  }
+}
+
+function showVetReview() {
+  const err = document.getElementById('v-form-err');
+  const weight = parseFloat(document.getElementById('v-weight').value);
+  if (!weight || weight <= 0) {
+    err.textContent = 'Dog Weight is required — it updates the matching engine.';
+    err.style.display = 'block';
+    return;
+  }
+  err.style.display = 'none';
+
+  const heartRate = document.getElementById('v-heartrate').value;
+  const blood = document.getElementById('v-blood').value;
+  const allergy = document.getElementById('v-allergy').value.trim();
+  const constraints = document.getElementById('v-constraints').value.trim();
+  const u = VET_SELECTED_DOG;
+
+  const rows = [
+    ['Patient', u.dogName + ' · ' + u.breed],
+    ['Owner', u.ownerName],
+    ['Dog ID', u.id],
+    ['Dog Weight', weight + ' kg'],
+    ['Heart Rate', heartRate ? heartRate + ' BPM' : '— Not recorded'],
+    ['Blood Result', blood || '— Not recorded'],
+    ['Allergy Warning', allergy || '— None flagged'],
+    ['Health Constraints', constraints || '— None listed'],
+    ['Exam Report', VET_REPORT_FILE ? '✅ ' + VET_REPORT_FILE.name.slice(0, 28) : '— No file uploaded'],
+  ];
+
+  document.getElementById('vet-review-content').innerHTML = rows.map(([l,v]) =>
+    `<div class="review-summary-item"><div class="rs-lbl">${l}</div><div class="rs-val">${v}</div></div>`
+  ).join('');
+
+  document.getElementById('vet-review-modal').style.display = 'flex';
+}
+
+function saveVetExam() {
+  const weight = parseFloat(document.getElementById('v-weight').value);
+  const heartRate = document.getElementById('v-heartrate').value;
+  const blood = document.getElementById('v-blood').value;
+  const allergy = document.getElementById('v-allergy').value.trim();
+  const constraints = document.getElementById('v-constraints').value.trim();
+  const ts = new Date().toISOString();
+
+  // Find and update the user record in DB
+  const idx = DB.users.findIndex(x => x.id === VET_SELECTED_DOG.id);
+  if (idx === -1) return;
+
+  const examRecord = {
+    examinedAt: ts,
+    weight, heartRate: heartRate || null,
+    bloodResult: blood || null,
+    allergyWarning: allergy || null,
+    healthConstraints: constraints || null,
+    reportFileName: VET_REPORT_FILE ? VET_REPORT_FILE.name : null,
+    vetNote: 'Recorded via Vet Portal'
+  };
+
+  // Update global dog record
+  DB.users[idx].weight = weight;
+  DB.users[idx].category = categorize(weight);
+  DB.users[idx].isExamined = true;
+  DB.users[idx].health = 'Cleared';
+  DB.users[idx].heartRate = heartRate || null;
+  DB.users[idx].bloodResult = blood || null;
+  DB.users[idx].allergyWarning = allergy || null;
+  DB.users[idx].healthConstraints = constraints || null;
+  DB.users[idx].lastExaminedAt = ts;
+  if (!DB.users[idx].examHistory) DB.users[idx].examHistory = [];
+  DB.users[idx].examHistory.push(examRecord);
+
+  // If this is the currently logged-in customer dog, update current
+  if (DB.current && DB.current.id === VET_SELECTED_DOG.id) {
+    DB.current = DB.users[idx];
+  }
+  DB.save();
+
+  // Update local reference
+  VET_SELECTED_DOG = DB.users[idx];
+
+  // Close review modal
+  document.getElementById('vet-review-modal').style.display = 'none';
+
+  // Show success
+  const sd = document.getElementById('vet-success-details');
+  sd.innerHTML = [
+    ['Patient', DB.users[idx].dogName],
+    ['Timestamp', new Date(ts).toLocaleString()],
+    ['Weight Updated', weight + ' kg → ' + (DB.users[idx].category.charAt(0).toUpperCase() + DB.users[idx].category.slice(1)) + ' class'],
+    ['Status', '✅ Examined · Training services unlocked'],
+  ].map(([l,v]) => `<div style="display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid var(--tan-lt);font-size:.82rem"><span style="color:var(--muted);font-weight:500">${l}</span><span style="color:var(--bark);font-weight:600">${v}</span></div>`).join('');
+  document.getElementById('vet-success-modal').style.display = 'flex';
+
+  // Refresh history panel
+  renderVetHistory(VET_SELECTED_DOG);
+
+  // Update profile badge
+  document.getElementById('vp-examined-badge').innerHTML = `<span class="badge badge-green">✓ Examination on file · Training Unlocked</span>`;
+  document.getElementById('vp-health').innerHTML = `<span class="badge badge-green">Cleared</span>`;
+}
+
+function renderVetHistory(u) {
+  const body = document.getElementById('vet-history-body');
+  if (!u.examHistory || !u.examHistory.length) {
+    body.innerHTML = '<p style="font-size:.84rem;color:var(--muted);text-align:center;padding:.5rem 0">No examination records yet.</p>';
+    return;
+  }
+  const sorted = [...u.examHistory].sort((a,b) => b.examinedAt.localeCompare(a.examinedAt));
+  body.innerHTML = sorted.map((e, i) => {
+    const d = new Date(e.examinedAt);
+    return `<div class="hist-entry ${i > 0 ? '' : ''}">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:.4rem;flex-wrap:wrap;gap:.3rem">
+        <span style="font-weight:700;font-size:.85rem;color:var(--bark)">Examination #${sorted.length - i}</span>
+        <span style="font-size:.72rem;color:var(--muted);font-family:monospace">${d.toLocaleString()}</span>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:.25rem .75rem;font-size:.79rem">
+        <div><span style="color:var(--muted)">Weight:</span> <strong>${e.weight} kg</strong></div>
+        <div><span style="color:var(--muted)">Heart Rate:</span> <strong>${e.heartRate ? e.heartRate + ' BPM' : '—'}</strong></div>
+        <div><span style="color:var(--muted)">Blood:</span> <strong>${e.bloodResult || '—'}</strong></div>
+        <div><span style="color:var(--muted)">Report:</span> <strong>${e.reportFileName ? '📎 ' + e.reportFileName.slice(0,18) : '—'}</strong></div>
+        ${e.allergyWarning ? `<div style="grid-column:span 2"><span style="color:var(--danger);font-weight:600">⚠ Allergy:</span> ${e.allergyWarning}</div>` : ''}
+        ${e.healthConstraints ? `<div style="grid-column:span 2"><span style="color:var(--muted)">Constraints:</span> ${e.healthConstraints}</div>` : ''}
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function vetClearForm() {
+  VET_SELECTED_DOG = null;
+  VET_REPORT_FILE = null;
+  document.getElementById('vet-search-input').value = '';
+  document.getElementById('vet-results-wrap').style.display = 'none';
+  document.getElementById('vet-profile-wrap').style.display = 'none';
+  document.getElementById('vet-empty-state').style.display = 'block';
+  document.getElementById('vet-report-input').value = '';
+  window.scrollTo(0,0);
+}
+
+/* ===== INIT ===== */
+updateNavUser();
+if(!DB.users.length){
+  const demos=[
+    {id:genId(),ownerName:'Sarah Chen',phone:'0812345678',dogName:'Biscuit',weight:28,breed:'Golden Retriever',health:'Cleared',category:'large',isExamined:true,createdAt:new Date().toISOString(),examHistory:[{examinedAt:new Date(Date.now()-7*24*60*60*1000).toISOString(),weight:28,heartRate:'78',bloodResult:'Normal',allergyWarning:'Sensitive to chicken protein',healthConstraints:'Avoid high-impact jumping due to hip dysplasia history',reportFileName:'biscuit_exam_jan2026.pdf',vetNote:'Recorded via Vet Portal'}]},
+    {id:genId(),ownerName:'Kanit P.',phone:'0867654321',dogName:'Mochi',weight:5.5,breed:'Corgi',health:'Pending',category:'small',isExamined:false,createdAt:new Date().toISOString()}
+  ];
+  DB.users.push(...demos);DB.save();
+}
+// Show role selector on first load
+document.getElementById('role-modal').style.display = 'flex';
+// Hide vet nav elements initially
+document.getElementById('vet-nav-indicator').style.display = 'none';
+document.getElementById('nb-vet').style.display = 'none';
+</script>
+</body>
+</html>
